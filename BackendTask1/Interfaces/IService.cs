@@ -21,6 +21,11 @@
         void Save<T>(T entity) where T : Entity;
 
         /// <summary>
+        /// Parse result from json<string>
+        /// </summary>
+        List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity;
+
+        /// <summary>
         /// Get max value
         /// </summary>
         int GetMaxValue();

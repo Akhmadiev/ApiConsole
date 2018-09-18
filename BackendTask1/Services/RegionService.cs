@@ -31,6 +31,23 @@
             }
         }
 
+        public List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity
+        {
+            var regions = data.Select(x => x.IncomeLevel.Value)
+                .Concat(data.Select(x => x.Region.Value))
+                .Concat(data.Select(x => x.Adminregion.Value))
+                .Concat(data.Select(x => x.LendingType.Value))
+                .Distinct()
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Select(x => new RegionEntity
+                {
+                    Value = x
+                })
+                .ToList();
+
+            return regions as List<T>;
+        }
+
         public void Save(List<CountryDto> countries)
         {
             var regions = countries.Select(x => x.IncomeLevel.Value)

@@ -70,6 +70,57 @@
             }
         }
 
+        public List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity
+        {
+            var countries = new List<CountryEntity>();
+
+            using (var context = new CountryContext())
+            {
+                var regions = data.Select(x => x.Region.Value);
+                var incomeLevels = data.Select(x => x.IncomeLevel.Value);
+                var adminregions = data.Select(x => x.Adminregion.Value);
+                var lendingTypes = data.Select(x => x.LendingType.Value);
+
+                var values = regions.Concat(incomeLevels.Concat(adminregions.Concat(lendingTypes))).Distinct().ToList();
+
+                var allRegions = context.Regions
+                    .Where(x => values.Contains(x.Value))
+                    .ToList();
+
+                foreach (var country in countries)
+                {
+                    var adminregion = allRegions
+                        .FirstOrDefault(x => x.Value == country.Adminregion.Value);
+
+                    var incomeLevel = allRegions
+                        .FirstOrDefault(x => x.Value == country.IncomeLevel.Value);
+
+                    var region = allRegions
+                        .FirstOrDefault(x => x.Value == country.Region.Value);
+
+                    var lendingType = allRegions
+                        .FirstOrDefault(x => x.Value == country.LendingType.Value);
+
+                    var newCountry = new CountryEntity
+                    {
+                        Adminregion = adminregion,
+                        IncomeLevel = incomeLevel,
+                        Region = region,
+                        LendingType = lendingType,
+                        CapitalCity = country.CapitalCity,
+                        Iso2Code = country.Iso2Code,
+                        Latitude = country.Latitude,
+                        Longitude = country.Longitude,
+                        Name = country.Name
+                    };
+
+                    countries.Add(newCountry);
+                }
+            }
+
+            return countries as List<T>;
+        }
+
         public void Save<T>(List<T> entities) where T : Entity
         {
             var saveEntityList = entities as List<CountryEntity>;
