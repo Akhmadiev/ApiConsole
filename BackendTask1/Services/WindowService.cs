@@ -19,11 +19,6 @@
         {
             var path = $"{Path.GetTempPath()}api_{DateTime.Now.ToString("dd.MM.yyyy hh.mm.ss")}.txt";
 
-            using (var sw = File.CreateText(path))
-            {
-                sw.WriteLine("START");
-            }
-
             var data = Api.Api.GetExternalResponse("https://api.myjson.com/bins/nkcgg");
             SaveInTemp(data.Result);
 
