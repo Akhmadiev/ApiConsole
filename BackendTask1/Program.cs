@@ -10,19 +10,21 @@
         {
             #region service
 
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
-            {
-                new WindowService()
-            };
-            ServiceBase.Run(ServicesToRun);
+            //ServiceBase[] ServicesToRun;
+            //ServicesToRun = new ServiceBase[]
+            //{
+            //    new WindowService()
+            //};
+            //ServiceBase.Run(ServicesToRun);
 
             #endregion
 
             #region console
 
-            //var main = new Main();
-            //main.Message += Message;
+            var main = new Main();
+            main.Message += Message;
+
+            main.Start2();
 
             //var t = main.Start();
             //while (true) { }

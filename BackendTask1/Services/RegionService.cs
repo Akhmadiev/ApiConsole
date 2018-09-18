@@ -5,32 +5,9 @@
     using BackendTask1.Dtos;
     using BackendTask1.EntityModels;
     using BackendTask1.Interfaces.Country;
-    using Castle.MicroKernel;
-    using Castle.Windsor;
 
     public class RegionService : IService
     {
-        public string GetData(List<CountryDto> countries)
-        {
-            var regions = countries.Select(x => x.IncomeLevel.Value)
-                .Concat(countries.Select(x => x.Region.Value))
-                .Concat(countries.Select(x => x.Adminregion.Value))
-                .Concat(countries.Select(x => x.LendingType.Value))
-                .Distinct()
-                .Where(x => !string.IsNullOrEmpty(x))
-                .ToList();
-
-            return string.Join("\n", regions);
-        }
-
-        public int GetMaxValue()
-        {
-            using (var context = new CountryContext())
-            {
-                return context.Regions.Max(x => x.Value.Length);
-            }
-        }
-
         public List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity
         {
             var regions = data.Select(x => x.IncomeLevel.Value)
@@ -46,32 +23,6 @@
                 .ToList();
 
             return regions as List<T>;
-        }
-
-        public void Save(List<CountryDto> countries)
-        {
-            var regions = countries.Select(x => x.IncomeLevel.Value)
-                .Concat(countries.Select(x => x.Region.Value))
-                .Concat(countries.Select(x => x.Adminregion.Value))
-                .Concat(countries.Select(x => x.LendingType.Value))
-                .Distinct()
-                .Where(x => !string.IsNullOrEmpty(x))
-                .ToList();
-
-            using (var context = new CountryContext())
-            {
-                foreach (var region in regions)
-                {
-                    var newRegion = new RegionEntity
-                    {
-                        Value = region
-                    };
-
-                    context.Regions.Add(newRegion);
-                }
-
-                context.SaveChanges();
-            }
         }
 
         public void Save<T>(List<T> entities) where T : Entity

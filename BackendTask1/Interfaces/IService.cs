@@ -24,15 +24,5 @@
         /// Parse result from json<string>
         /// </summary>
         List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity;
-
-        /// <summary>
-        /// Get max value
-        /// </summary>
-        int GetMaxValue();
-
-        /// <summary>
-        /// Get data
-        /// </summary>
-        string GetData(List<CountryDto> countries);
     }
 }

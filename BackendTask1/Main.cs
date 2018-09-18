@@ -14,6 +14,7 @@
     using BackendTask1.Services.Region;
     using Castle.MicroKernel.Registration;
     using System.IO;
+    using BackendTask1.EntityModels;
 
     public class Main
     {
