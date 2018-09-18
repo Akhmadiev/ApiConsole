@@ -53,8 +53,8 @@
         /// <param name="container"></param>
         public void RegisterServices(IWindsorContainer container)
         {
-            container.Register(Component.For<ICountryService>().ImplementedBy<RegionService>().Named("RegionService"));
-            container.Register(Component.For<ICountryService>().ImplementedBy<CountryService>().Named("CountryService"));
+            container.Register(Component.For<IService>().ImplementedBy<RegionService>().Named("RegionService"));
+            container.Register(Component.For<IService>().ImplementedBy<CountryService>().Named("CountryService"));
         }
     }
 }

@@ -8,7 +8,7 @@
     using Castle.MicroKernel;
     using Castle.Windsor;
 
-    public class RegionService : ICountryService
+    public class RegionService : IService
     {
         public string GetData(List<CountryDto> countries)
         {
@@ -53,6 +53,40 @@
                     context.Regions.Add(newRegion);
                 }
 
+                context.SaveChanges();
+            }
+        }
+
+        public void Save<T>(List<T> entities) where T : Entity
+        {
+            var saveEntityList = entities as List<RegionEntity>;
+            if (saveEntityList == null)
+            {
+                throw new System.Exception("Can't save empty entity");
+            }
+
+            using (var context = new CountryContext())
+            {
+                foreach (var saveEntity in saveEntityList)
+                {
+                    context.Regions.Add(saveEntity);
+                }
+
+                context.SaveChanges();
+            }
+        }
+
+        public void Save<T>(T entity) where T : Entity
+        {
+            var saveEntity = entity as RegionEntity;
+            if (saveEntity == null)
+            {
+                throw new System.Exception("Can't save empty entity");
+            }
+
+            using (var context = new CountryContext())
+            {
+                context.Regions.Add(saveEntity);
                 context.SaveChanges();
             }
         }

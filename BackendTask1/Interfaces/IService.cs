@@ -1,18 +1,24 @@
 ﻿namespace BackendTask1.Interfaces.Country
 {
     using BackendTask1.Dtos;
+    using BackendTask1.EntityModels;
     using Castle.MicroKernel.Registration;
     using System.Collections.Generic;
 
     /// <summary>
     /// Country's interface
     /// </summary>
-    public interface ICountryService
+    public interface IService
     {
         /// <summary>
         /// Save entites
         /// </summary>
-        void Save(List<CountryDto> countries);
+        void Save<T>(List<T> entities) where T : Entity;
+
+        /// <summary>
+        /// Save entity
+        /// </summary>
+        void Save<T>(T entity) where T : Entity;
 
         /// <summary>
         /// Get max value

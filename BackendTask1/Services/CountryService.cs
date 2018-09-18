@@ -1,14 +1,12 @@
-﻿namespace BackendTask1.Services.Country
+﻿namespace BackendTask1
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using BackendTask1.Dtos;
     using BackendTask1.EntityModels;
     using BackendTask1.Interfaces.Country;
-    using Castle.MicroKernel;
 
-    public class CountryService : ICountryService
+    public class CountryService : IService
     {
         public string GetData(List<CountryDto> countries)
         {
@@ -68,6 +66,40 @@
                     context.Countries.Add(newCountry);
                 }
 
+                context.SaveChanges();
+            }
+        }
+
+        public void Save<T>(List<T> entities) where T : Entity
+        {
+            var saveEntityList = entities as List<CountryEntity>;
+            if (saveEntityList == null)
+            {
+                throw new System.Exception("Can't save empty entity");
+            }
+
+            using (var context = new CountryContext())
+            {
+                foreach (var saveEntity in saveEntityList)
+                {
+                    context.Countries.Add(saveEntity);
+                }
+
+                context.SaveChanges();
+            }
+        }
+
+        public void Save<T>(T entity) where T : Entity
+        {
+            var saveEntity = entity as CountryEntity;
+            if (saveEntity == null)
+            {
+                throw new System.Exception("Can't save empty entity");
+            }
+
+            using (var context = new CountryContext())
+            {
+                context.Countries.Add(saveEntity);
                 context.SaveChanges();
             }
         }
