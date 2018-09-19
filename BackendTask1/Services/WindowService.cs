@@ -1,15 +1,18 @@
 ﻿namespace BackendTask1.Services
 {
+    using Quartz;
+    using Quartz.Impl;
     using System;
-    using System.IO;
     using System.ServiceProcess;
-    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Window's service
     /// </summary>
     public partial class WindowService : ServiceBase
     {
+        public Action<string> Message { get; set; }
+
         public WindowService()
         {
             InitializeComponent();
@@ -17,22 +20,25 @@
 
         protected override void OnStart(string[] args)
         {
-            var path = $"{Path.GetTempPath()}api_{DateTime.Now.ToString("dd.MM.yyyy hh.mm.ss")}.txt";
-
-            var data = Api.Api.GetExternalResponse("https://api.myjson.com/bins/nkcgg");
-            SaveInTemp(data.Result);
-
-            Thread.Sleep(1000);
+            var task = Start();
+            task.Wait();
         }
 
-        private void SaveInTemp(string data)
+        private async Task Start()
         {
-            var path = $"{Path.GetTempPath()}api_{DateTime.Now.ToString("dd.MM.yyyy hh.mm.ss")}.txt";
+            var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+            await scheduler.Start();
 
-            using (var sw = File.CreateText(path))
-            {
-                sw.WriteLine(data);
-            }
+            var job = JobBuilder.Create<JobScheduler>().Build();
+            job.JobDataMap.Add("MessageAction", Message);
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("trigger1", "group1")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever())
+                .Build();
+
+            await scheduler.ScheduleJob(job, trigger);
         }
 
         protected override void OnStop()
@@ -65,7 +71,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.ServiceName = "Service12";
+            this.ServiceName = "ApiWindowService";
         }
     }
 }

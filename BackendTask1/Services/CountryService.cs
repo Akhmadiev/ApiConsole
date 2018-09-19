@@ -8,16 +8,23 @@
 
     public class CountryService : IService
     {
-        public List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity
+        public List<T> ParsingResult<T, T2>(List<T2> data) where T : Entity where T2 : class
         {
+            var parsedData = data as List<CountryDto>;
+
+            if (parsedData == null)
+            {
+                throw new System.Exception("Can't parse data");
+            }
+
             var countries = new List<CountryEntity>();
 
             using (var context = new CountryContext())
             {
-                var regions = data.Select(x => x.Region.Value);
-                var incomeLevels = data.Select(x => x.IncomeLevel.Value);
-                var adminregions = data.Select(x => x.Adminregion.Value);
-                var lendingTypes = data.Select(x => x.LendingType.Value);
+                var regions = parsedData.Select(x => x.Region.Value);
+                var incomeLevels = parsedData.Select(x => x.IncomeLevel.Value);
+                var adminregions = parsedData.Select(x => x.Adminregion.Value);
+                var lendingTypes = parsedData.Select(x => x.LendingType.Value);
 
                 var values = regions.Concat(incomeLevels.Concat(adminregions.Concat(lendingTypes))).Distinct().ToList();
 

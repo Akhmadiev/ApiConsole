@@ -15,9 +15,9 @@
             serviceInstaller = new ServiceInstaller();
             processInstaller = new ServiceProcessInstaller();
 
-            processInstaller.Account = ServiceAccount.NetworkService;
+            processInstaller.Account = ServiceAccount.LocalSystem;
             serviceInstaller.StartType = ServiceStartMode.Manual;
-            serviceInstaller.ServiceName = "Service12";
+            serviceInstaller.ServiceName = "ApiWindowService";
             Installers.Add(processInstaller);
             Installers.Add(serviceInstaller);
         }

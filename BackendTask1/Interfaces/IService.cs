@@ -23,6 +23,6 @@
         /// <summary>
         /// Parse result from json<string>
         /// </summary>
-        List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity;
+        List<T> ParsingResult<T, T2>(List<T2> data) where T : Entity where T2 : class;
     }
 }

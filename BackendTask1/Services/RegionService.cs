@@ -8,12 +8,19 @@
 
     public class RegionService : IService
     {
-        public List<T> ParsingResult<T>(List<CountryDto> data) where T : Entity
+        public List<T> ParsingResult<T, T2>(List<T2> data) where T : Entity where T2 : class
         {
-            var regions = data.Select(x => x.IncomeLevel.Value)
-                .Concat(data.Select(x => x.Region.Value))
-                .Concat(data.Select(x => x.Adminregion.Value))
-                .Concat(data.Select(x => x.LendingType.Value))
+            var parsedData = data as List<CountryDto>;
+
+            if (parsedData == null)
+            {
+                throw new System.Exception("Can't parse data");
+            }
+
+            var regions = parsedData.Select(x => x.IncomeLevel.Value)
+                .Concat(parsedData.Select(x => x.Region.Value))
+                .Concat(parsedData.Select(x => x.Adminregion.Value))
+                .Concat(parsedData.Select(x => x.LendingType.Value))
                 .Distinct()
                 .Where(x => !string.IsNullOrEmpty(x))
                 .Select(x => new RegionEntity
